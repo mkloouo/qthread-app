@@ -11,12 +11,15 @@ class BallController : public QObject
 {
 	Q_OBJECT
 public:
-	BallController(QObject* parent = nullptr);
+    BallController(int width, int height, QObject* parent = nullptr);
 	~BallController();
 
 public slots:
-	void startBall();
+    void startBall(const QRect& bounds);
 	void stopBall();
+    void changeColor();
+    void speedUp();
+    void speedDown();
 
 signals:
 	void getBallImage();

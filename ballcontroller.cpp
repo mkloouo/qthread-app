@@ -1,9 +1,9 @@
 #include "ballcontroller.h"
 #include <QDebug>
 
-BallController::BallController(QObject* parent)
-	: QObject(parent), ballWidget_(400, 400),
-	  ballPhysics_(QPoint(200, 200), QPointF(0.7f, 0.3f), ballWidget_.bounds()),
+BallController::BallController(int width, int height, QObject* parent)
+    : QObject(parent), ballWidget_(width, height),
+      ballPhysics_(QPoint(width / 2, height / 2), QPointF(0.7f, 0.3f), ballWidget_.bounds()),
 	  isRunning_(false)
 {
 
@@ -19,6 +19,8 @@ BallController::BallController(QObject* parent)
 
 	QObject::connect(&ballWidget_, &BallWidget::updatedImage,
 					 this, &BallController::updatedImage, Qt::DirectConnection);
+    QObject::connect(&ballWidget_, &BallWidget::boundsUpdated,
+                     &ballPhysics_, &BallPhysics::updateBounds, Qt::DirectConnection);
 
 	ballWidget_.setRadius(30);
 }
@@ -28,9 +30,10 @@ BallController::~BallController()
 	stopBall();
 }
 
-void BallController::startBall()
+void BallController::startBall(const QRect& bounds)
 {
 	if (!isRunning_) {
+        ballWidget_.setBounds(bounds);
 		widgetThread_.start();
 		physicsThread_.start();
 		isRunning_ = true;
@@ -45,5 +48,20 @@ void BallController::stopBall()
 		widgetThread_.wait();
 		physicsThread_.wait();
 		isRunning_ = false;
-	}
+    }
+}
+
+void BallController::changeColor()
+{
+    ballWidget_.setColor(qrand() % 255, qrand() % 255, qrand() % 255);
+}
+
+void BallController::speedUp()
+{
+    ballPhysics_.speedUp();
+}
+
+void BallController::speedDown()
+{
+    ballPhysics_.speedDown();
 }

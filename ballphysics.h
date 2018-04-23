@@ -15,8 +15,12 @@ public:
 						 QRect bounds, QObject *parent = nullptr);
 	~BallPhysics();
 
+    void speedUp();
+    void speedDown();
+
 public slots:
-	void getNewPosition();
+    void getNewPosition();
+    void updateBounds(QRect bounds);
 
 signals:
 	void newPosition(QPointF position);
@@ -26,6 +30,7 @@ private:
 	QPointF direction_;
 	QRect bounds_;
 	BallDb db_;
+    int speed_;
 
 };
 

@@ -6,14 +6,31 @@
 BallPhysics::BallPhysics(QPointF pos, QPointF dir,
 						 QRect bounds, QObject *parent)
 	: QObject(parent), position_(pos), direction_(dir),
-	  bounds_(bounds), db_("ball.db")
+      bounds_(bounds), db_("ball.db"), speed_(10)
 {
-	qDebug() << db_.createTable();
-	qDebug() << db_.tableExists();
+    if (db_.ballTableExists()) {
+        db_.getBallData(position_, direction_, speed_);
+    } else {
+        db_.createBallTable();
+        db_.insertBallData(position_, direction_, speed_);
+    }
 }
 
 BallPhysics::~BallPhysics()
 {
+    db_.updateBallData(position_, direction_, speed_);
+}
+
+void BallPhysics::speedUp()
+{
+    if (speed_ > 0) {
+        speed_ -= 1;
+    }
+}
+
+void BallPhysics::speedDown()
+{
+    speed_ += 1;
 }
 
 void BallPhysics::getNewPosition()
@@ -26,6 +43,11 @@ void BallPhysics::getNewPosition()
 
 	position_ += direction_;
 
-	this->thread()->msleep(10);
-	emit newPosition(position_);
+    this->thread()->msleep(speed_);
+    emit newPosition(position_);
+}
+
+void BallPhysics::updateBounds(QRect bounds)
+{
+    bounds_ = bounds;
 }

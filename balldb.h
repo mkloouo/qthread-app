@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QPoint>
 
 class BallDb : public QObject
 {
@@ -12,11 +13,12 @@ public:
 	explicit BallDb(QString path, QObject *parent = nullptr);
 	~BallDb();
 
-	bool createTable();
-	bool tableExists();
+    bool createBallTable();
+    bool ballTableExists();
 
-//	bool getBallData(QPointF pos, QPointF dir);
-//	bool storeBallData(QPointF pos, QPointF dir);
+    bool getBallData(QPointF& pos, QPointF& dir, int& speed);
+    bool insertBallData(QPointF pos, QPointF dir, int speed);
+    bool updateBallData(QPointF pos, QPointF dir, int speed);
 
 private:
 	QSqlDatabase db_;

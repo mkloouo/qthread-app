@@ -23,13 +23,15 @@ protected:
 
 protected slots:
 	void updateLabel(QImage picture);
+    void clickedStart();
 
 signals:
 	void updatedLabel();
+    void startBallBounds(const QRect& bounds);
 
 private:
-	Ui::BallWindow *ui;
-	BallController ballController_;
+    Ui::BallWindow* ui;
+    BallController* ballController_;
 
 };
 
