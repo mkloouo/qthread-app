@@ -1,17 +1,19 @@
 #include "ballphysics.h"
 
 #include <QThread>
+#include <QDebug>
 
 BallPhysics::BallPhysics(QPointF pos, QPointF dir,
 						 QRect bounds, QObject *parent)
 	: QObject(parent), position_(pos), direction_(dir),
-	  bounds_(bounds)
+	  bounds_(bounds), db_("ball.db")
 {
+	qDebug() << db_.createTable();
+	qDebug() << db_.tableExists();
 }
 
 BallPhysics::~BallPhysics()
 {
-
 }
 
 void BallPhysics::getNewPosition()

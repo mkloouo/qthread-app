@@ -25,11 +25,11 @@ protected slots:
 	void updateLabel(QImage picture);
 
 signals:
-	void updated();
+	void updatedLabel();
 
 private:
 	Ui::BallWindow *ui;
-	BallController controller_;
+	BallController ballController_;
 
 };
 

@@ -15,15 +15,13 @@ public:
 
 	QRect bounds() const;
 
+	void setRadius(int radius);
+
 public slots:
-	void updatePosition(QPointF pos);
-	void updateBounds(QRect bounds);
-	void updateColor(QColor color);
-	void updateRadius(int radius);
-	void updateImage();
+	void updateImage(QPointF pos);
 
 signals:
-	void movedBall(QImage image);
+	void updatedImage(QImage image);
 
 private:
 	QPointF pos_;

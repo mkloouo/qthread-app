@@ -15,12 +15,11 @@ public:
 	~BallController();
 
 public slots:
-	void startThreads();
-	void stopThreads();
+	void startBall();
+	void stopBall();
 
 signals:
-	void updateImage();
-	void threadsFinished();
+	void getBallImage();
 	void updatedImage(QImage picture);
 
 private:
@@ -28,7 +27,7 @@ private:
 	QThread physicsThread_;
 	BallWidget ballWidget_;
 	BallPhysics ballPhysics_;
-	bool started_;
+	bool isRunning_;
 
 };
 

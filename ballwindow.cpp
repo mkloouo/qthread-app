@@ -10,14 +10,14 @@ BallWindow::BallWindow(QWidget *parent) :
 	ui->setupUi(this);
 
 	QObject::connect(ui->startPushButton, &QPushButton::clicked,
-					 &controller_, &BallController::startThreads);
+					 &ballController_, &BallController::startBall);
 	QObject::connect(ui->stopPushButton, &QPushButton::clicked,
-					 &controller_, &BallController::stopThreads);
+					 &ballController_, &BallController::stopBall);
 
-	QObject::connect(&controller_, &BallController::updatedImage,
+	QObject::connect(&ballController_, &BallController::updatedImage,
 					 this, &BallWindow::updateLabel);
-	QObject::connect(this, &BallWindow::updated,
-					 &controller_, &BallController::updateImage);
+	QObject::connect(this, &BallWindow::updatedLabel,
+					 &ballController_, &BallController::getBallImage);
 }
 
 BallWindow::~BallWindow()
@@ -40,5 +40,5 @@ void BallWindow::changeEvent(QEvent *e)
 void BallWindow::updateLabel(QImage image)
 {
 	ui->imageLabel->setPixmap(QPixmap::fromImage(image));
-	emit updated();
+	emit updatedLabel();
 }

@@ -4,7 +4,7 @@
 BallController::BallController(QObject* parent)
 	: QObject(parent), ballWidget_(400, 400),
 	  ballPhysics_(QPoint(200, 200), QPointF(0.7f, 0.3f), ballWidget_.bounds()),
-	  started_(false)
+	  isRunning_(false)
 {
 
 	ballWidget_.moveToThread(&widgetThread_);
@@ -12,39 +12,38 @@ BallController::BallController(QObject* parent)
 
 	QObject::connect(&physicsThread_, &QThread::started,
 					 &ballPhysics_, &BallPhysics::getNewPosition);
-	QObject::connect(this, &BallController::updateImage,
+	QObject::connect(this, &BallController::getBallImage,
 					 &ballPhysics_, &BallPhysics::getNewPosition);
 	QObject::connect(&ballPhysics_, &BallPhysics::newPosition,
-					 &ballWidget_, &BallWidget::updatePosition, Qt::DirectConnection);
+					 &ballWidget_, &BallWidget::updateImage, Qt::DirectConnection);
 
-	QObject::connect(&ballWidget_, &BallWidget::movedBall,
+	QObject::connect(&ballWidget_, &BallWidget::updatedImage,
 					 this, &BallController::updatedImage, Qt::DirectConnection);
 
-	ballWidget_.updateRadius(30);
+	ballWidget_.setRadius(30);
 }
 
 BallController::~BallController()
 {
-	stopThreads();
+	stopBall();
 }
 
-void BallController::startThreads()
+void BallController::startBall()
 {
-	if (!started_) {
+	if (!isRunning_) {
 		widgetThread_.start();
 		physicsThread_.start();
-		started_ = true;
+		isRunning_ = true;
 	}
 }
 
-void BallController::stopThreads()
+void BallController::stopBall()
 {
-	if (started_) {
+	if (isRunning_) {
 		widgetThread_.quit();
 		physicsThread_.quit();
 		widgetThread_.wait();
 		physicsThread_.wait();
-		started_ = false;
-		emit threadsFinished();
+		isRunning_ = false;
 	}
 }

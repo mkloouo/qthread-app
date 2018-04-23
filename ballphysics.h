@@ -5,6 +5,8 @@
 #include <QPoint>
 #include <QRect>
 
+#include "balldb.h"
+
 class BallPhysics : public QObject
 {
 	Q_OBJECT
@@ -23,6 +25,7 @@ private:
 	QPointF position_;
 	QPointF direction_;
 	QRect bounds_;
+	BallDb db_;
 
 };
 
