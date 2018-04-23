@@ -1,0 +1,6 @@
+.idea
+.vscode
+*.autosave
+*.user
+*.obj
+*.o
